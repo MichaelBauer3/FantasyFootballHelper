@@ -39,4 +39,14 @@ public class EspnApiInterfaceImp
     ];
 
     public static Dictionary<string, Team> TeamDictionary = _teams.ToDictionary(t => t.Name);
+    public static Dictionary<int, string> PositionsDictionary = new ()
+    {
+        {-1, "UNK"},
+        {0, "QB"},
+        {2, "RB"},
+        {3, "WR"},
+        {5, "TE"},
+        {16, "D/ST"},
+        {17, "K"}
+    };
 }

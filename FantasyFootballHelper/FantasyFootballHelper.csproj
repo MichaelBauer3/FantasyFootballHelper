@@ -5,13 +5,19 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <UserSecretsId>6b5ed088-7b5c-4e96-87b3-df7b7306856c</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Library.EspnApiInterface\Library.EspnApiInterface.csproj" />
+      <ProjectReference Include="..\Library.SportsBookData\Library.SportsBookData.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Cocona" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0-rc.1.24431.7" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.0-rc.1.24431.7" />
+      <PackageReference Include="MySql.Data" Version="9.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 

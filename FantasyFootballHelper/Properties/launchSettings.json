@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "JobRunner-StoreDataInDatabase" : {
+      "commandName": "Project",
+      "commandLineArgs": "store-data-in-database"
+    }
+  }
+}
