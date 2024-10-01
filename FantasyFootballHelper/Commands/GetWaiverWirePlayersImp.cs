@@ -59,8 +59,7 @@ public class GetWaiverWirePlayersImp : IGetWaiverWirePlayers
                         {
                             players.Add(new Player()
                             {
-                                FirstName = player["FirstName"]?.ToString(),
-                                LastName = player["LastName"]?.ToString(),
+                                Name = player["FirstName"] + " " + player["LastName"],
                                 PlayerId = (int?)player["PlayerId"],
                                 ProTeamId = (int?)player["ProTeamId"],
                                 Position = player["Position"]?.ToString(),

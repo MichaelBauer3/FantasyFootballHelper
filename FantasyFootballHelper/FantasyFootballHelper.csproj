@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Library.EspnApiInterface\Library.EspnApiInterface.csproj" />
+      <ProjectReference Include="..\Library.FantasyFootballDBInterface\Library.FantasyFootballDBInterface.csproj" />
       <ProjectReference Include="..\Library.SportsBookData\Library.SportsBookData.csproj" />
     </ItemGroup>
 

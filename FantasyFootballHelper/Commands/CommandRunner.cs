@@ -1,5 +1,7 @@
 using Cocona;
 using FantasyFootballHelper.Commands.CommandHelpers.Generic;
+using Library.FantasyFootballDBInterface;
+using Library.FantasyFootballDBInterface.FantasyFootballDBMySqlInterface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -10,6 +12,7 @@ public class CommandRunner : CommandBase
     private readonly ILogger<CommandRunner> _logger;
     private readonly ISetUpApi _setupApi;
     private readonly IGetWaiverWirePlayers _getWaiverWirePlayers;
+    private readonly IFantasyFootballDbInterface _fantasyFootballDbInterface;
     private readonly IConfiguration _configuration;
     
     public CommandRunner(
@@ -17,11 +20,13 @@ public class CommandRunner : CommandBase
         ISetUpApi setUpApi,
         IGetWaiverWirePlayers getWaiverWirePlayers,
         IConfiguration configuration,
+        IFantasyFootballDbInterface fantasyFootballDbInterface,
         ICoconaContextWrapper coconaContextWrapper) : base(coconaContextWrapper)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _setupApi = setUpApi ?? throw new ArgumentNullException(nameof(setUpApi));
         _getWaiverWirePlayers = getWaiverWirePlayers ?? throw new ArgumentNullException(nameof(getWaiverWirePlayers));
+        _fantasyFootballDbInterface = fantasyFootballDbInterface ?? throw new ArgumentNullException(nameof(fantasyFootballDbInterface));
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
 
@@ -42,9 +47,12 @@ public class CommandRunner : CommandBase
         
         _logger.LogInformation("Getting waiver wire players");
         var players = await _getWaiverWirePlayers.RunAsync(handler, endpoints).ConfigureAwait(false);
-        _logger.LogInformation("Waiver wire players complete");
-        
-        
+        var playersToInsert = players.ToList();
+        if (playersToInsert.Any())
+        {
+            _logger.LogInformation($"[{playersToInsert.Count}] players are being inserted to the database");
+            await _fantasyFootballDbInterface.InsertToMySqlDatabaseAsync(playersToInsert, "PLAYERS");
+        }
         
         await Task.CompletedTask;
     }

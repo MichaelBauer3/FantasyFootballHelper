@@ -4,6 +4,9 @@ using FantasyFootballHelper.Commands;
 using FantasyFootballHelper.Commands.CommandHelpers.Generic;
 using FantasyFootballHelper.Commands.CommandHelpers.SetUpApiHelper;
 using Library.EspnApiInterface.Helper;
+using Library.FantasyFootballDBInterface;
+using Library.FantasyFootballDBInterface.FantasyFootballDBMySqlInterface;
+using Library.FantasyFootballDBInterface.SqlReader;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -44,6 +47,9 @@ namespace FantasyFootballHelper
             builder.Services.AddTransient<ISetUpApi, SetUpApiImp>();
             builder.Services.AddTransient<IGetWaiverWirePlayers, GetWaiverWirePlayersImp>();
             builder.Services.AddTransient<ISetUpApiHelper, SetUpApiHelperImp>();
+            builder.Services.AddTransient<IFantasyFootballDbMySqlInterface, FantasyFootballDbMySqlImp>();
+            builder.Services.AddTransient<IFantasyFootballDbInterface, FantasyFootballDbInterfaceImp>();
+            builder.Services.AddTransient<ISqlFileReader, SqlFileReaderImp>();
         }
     }
 }
