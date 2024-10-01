@@ -1,8 +1,16 @@
 {
   "profiles": {
-    "JobRunner-StoreDataInDatabase" : {
+    "JobRunner-CommandRunner" : {
       "commandName": "Project",
-      "commandLineArgs": "store-data-in-database"
+      "commandLineArgs": "command-runner"
+    },
+    "JobRunner-SetUpApi" : {
+      "commandName": "Project",
+      "commandLineArgs": "set-up-api"
+    },
+    "JobRunner-GetWaiverWirePlayers" : {
+      "commandName": "Project",
+      "commandLineArgs": "get-waiver-wire-players"
     }
   }
 }

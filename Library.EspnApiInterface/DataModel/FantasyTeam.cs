@@ -8,5 +8,5 @@ public class FantasyTeam
     public required decimal? PointsAgainst { get; set; }
     public required int? Wins { get; set; }
     public required int? Losses { get; set; }
-    public required IEnumerable<Players>? Roster { get; set; }
+    public required IEnumerable<Player>? Roster { get; set; }
 }

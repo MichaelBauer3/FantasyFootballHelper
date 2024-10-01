@@ -66,7 +66,7 @@ public class FantasyFootballDbMySqlImp : IFantasyFootballDbMySqlInterface
             DataSet ds = new DataSet();
             DateTimeOffset startTime = DateTimeOffset.Now;
             DateTimeOffset endTime;
-            MySqlConnection connection = null;
+            MySqlConnection? connection = null;
             bool success = false;
 
             try
@@ -112,7 +112,7 @@ public class FantasyFootballDbMySqlImp : IFantasyFootballDbMySqlInterface
             
             TimeSpan tsDifference = endTime - startTime;
             double tsSeconds = Math.Round(tsDifference.TotalSeconds, 3);
-            _logger.LogDebug($"Query ran for [{tsSeconds}] seconds, and returned a DataTable with " +
+            _logger.LogDebug($"Success {success}: Query ran for [{tsSeconds}] seconds, and returned a DataTable with " +
                              $"[{ds.Tables[0].Rows.Count}] rows and [{ds.Tables[0].Columns.Count}] columns");
             
             return Task.FromResult(ds);

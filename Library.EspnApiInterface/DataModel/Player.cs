@@ -1,12 +1,12 @@
 namespace Library.EspnApiInterface.DataModel;
 
-public class Players
+public class Player
 {
-    public required int? PlayerId { get; set; }
     public required string? FirstName { get; set; }
     public required string? LastName { get; set; }
+    public required int? PlayerId { get; set; }
+    public required int? ProTeamId { get; set; }
     public required string? Position { get; set; }
-    public required string? TeamId { get; set; }
     
     public int? Targets { get; set; }
     public int? Catches { get; set; }

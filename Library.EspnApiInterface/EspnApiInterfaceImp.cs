@@ -35,7 +35,8 @@ public class EspnApiInterfaceImp
                                                new Team { Abbreviation = "SEA", Name = "Seahawks", State = "Washington", TeamId = 26},
                                                new Team { Abbreviation = "TB", Name = "Buccaneers", State = "Florida", TeamId = 27},
                                                new Team { Abbreviation = "TEN", Name = "Titans", State = "Tennessee", TeamId = 10},
-                                               new Team { Abbreviation = "WAS", Name = "Commanders", State = "Maryland", TeamId = 28}
+                                               new Team { Abbreviation = "WAS", Name = "Commanders", State = "District of Columbia", TeamId = 28},
+                                               new Team { Abbreviation = "UNK", Name = string.Empty, State = "Unknown", TeamId = 32}
     ];
 
     public static Dictionary<string, Team> TeamDictionary = _teams.ToDictionary(t => t.Name);

@@ -1,10 +1,11 @@
 ﻿using Cocona;
+using Cocona.Builder;
 using FantasyFootballHelper.Commands;
 using FantasyFootballHelper.Commands.CommandHelpers.Generic;
+using FantasyFootballHelper.Commands.CommandHelpers.SetUpApiHelper;
 using Library.EspnApiInterface.Helper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace FantasyFootballHelper
 {
@@ -21,15 +22,28 @@ namespace FantasyFootballHelper
 
             builder.Configuration.AddConfiguration(configuration);
 
-            builder.Services.AddTransient<ICoconaContextWrapper, CoconaContextWrapperImp>();
-            builder.Services.AddSingleton<IEspnApiCall, EspnApiCallImp>();
+            SetUpTransients(builder);
+            builder.Services.AddSingleton<IConfiguration>(configuration);
+            builder.Services.AddSingleton<IAvailableWaivers, AvailableWaiverImp>();
             builder.Services.AddLogging();
             
             var app = builder.Build();
             
-            app.AddCommands<GetDataAndSendToMySql>();
+            app.AddCommands<SetUpApiImp>();
+            app.AddCommands<GetWaiverWirePlayersImp>();
+            app.AddCommands<CommandRunner>();
 
             app.Run();
+        }
+
+        public static void SetUpTransients(CoconaAppBuilder builder)
+        {
+            builder.Services.AddTransient<ICoconaContextWrapper, CoconaContextWrapperImp>();
+            builder.Services.AddTransient<ISetUpApiHelper, SetUpApiHelperImp>();
+            builder.Services.AddTransient<IEspnApiCall, EspnApiCallImp>();
+            builder.Services.AddTransient<ISetUpApi, SetUpApiImp>();
+            builder.Services.AddTransient<IGetWaiverWirePlayers, GetWaiverWirePlayersImp>();
+            builder.Services.AddTransient<ISetUpApiHelper, SetUpApiHelperImp>();
         }
     }
 }

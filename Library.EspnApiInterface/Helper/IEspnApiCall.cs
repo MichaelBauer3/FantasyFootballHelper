@@ -6,5 +6,5 @@ namespace Library.EspnApiInterface.Helper;
 
 public interface IEspnApiCall
 {
-    CookieContainer CallEspnApi(string url);
+    CookieContainer SetUpEspnApiCookies();
 }
