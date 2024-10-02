@@ -1,6 +1,7 @@
 ﻿using Cocona;
 using Cocona.Builder;
 using FantasyFootballHelper.Commands;
+using FantasyFootballHelper.Commands.CommandHelpers.CommandRunnerHelper;
 using FantasyFootballHelper.Commands.CommandHelpers.Generic;
 using FantasyFootballHelper.Commands.CommandHelpers.SetUpApiHelper;
 using Library.EspnApiInterface.Helper;
@@ -50,6 +51,7 @@ namespace FantasyFootballHelper
             builder.Services.AddTransient<IFantasyFootballDbMySqlInterface, FantasyFootballDbMySqlImp>();
             builder.Services.AddTransient<IFantasyFootballDbInterface, FantasyFootballDbInterfaceImp>();
             builder.Services.AddTransient<ISqlFileReader, SqlFileReaderImp>();
+            builder.Services.AddTransient<ICommandRunnerHelper, CommandRunnerHelperImp>();
         }
     }
 }

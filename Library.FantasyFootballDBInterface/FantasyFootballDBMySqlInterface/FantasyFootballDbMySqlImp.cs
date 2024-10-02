@@ -149,14 +149,7 @@ public class FantasyFootballDbMySqlImp : IFantasyFootballDbMySqlInterface
                         {
                             command.Parameters.AddWithValue($"@{property.Name}",
                                 property.GetValue(entity) ?? DBNull.Value);
-
-                            var propertyName = property.Name;
-                            var propertyValue = property.GetValue(entity) ?? DBNull.Value;
-                            Console.WriteLine($"Adding parameter @{propertyName} with value: {propertyValue}");
-
                         }
-
-                        Console.WriteLine("\n");
                         await command.ExecuteNonQueryAsync();
                     }
 

@@ -1,4 +1,5 @@
 using Cocona;
+using FantasyFootballHelper.Commands.CommandHelpers.CommandRunnerHelper;
 using FantasyFootballHelper.Commands.CommandHelpers.Generic;
 using Library.FantasyFootballDBInterface;
 using Library.FantasyFootballDBInterface.FantasyFootballDBMySqlInterface;
@@ -13,6 +14,7 @@ public class CommandRunner : CommandBase
     private readonly ISetUpApi _setupApi;
     private readonly IGetWaiverWirePlayers _getWaiverWirePlayers;
     private readonly IFantasyFootballDbInterface _fantasyFootballDbInterface;
+    private readonly ICommandRunnerHelper _commandRunnerHelper;
     private readonly IConfiguration _configuration;
     
     public CommandRunner(
@@ -21,12 +23,14 @@ public class CommandRunner : CommandBase
         IGetWaiverWirePlayers getWaiverWirePlayers,
         IConfiguration configuration,
         IFantasyFootballDbInterface fantasyFootballDbInterface,
+        ICommandRunnerHelper commandRunnerHelper,
         ICoconaContextWrapper coconaContextWrapper) : base(coconaContextWrapper)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _setupApi = setUpApi ?? throw new ArgumentNullException(nameof(setUpApi));
         _getWaiverWirePlayers = getWaiverWirePlayers ?? throw new ArgumentNullException(nameof(getWaiverWirePlayers));
         _fantasyFootballDbInterface = fantasyFootballDbInterface ?? throw new ArgumentNullException(nameof(fantasyFootballDbInterface));
+        _commandRunnerHelper = commandRunnerHelper ?? throw new ArgumentNullException(nameof(commandRunnerHelper));
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
 
@@ -37,10 +41,10 @@ public class CommandRunner : CommandBase
     {
         _logger.LogInformation("Starting command runner");
         _logger.LogInformation("Setting up API");
+        var year = _configuration["year"];
         var returnedTuple  = await _setupApi.RunAsync(leagueId: _configuration["leagueId"],
-            year: _configuration["year"],
-            week: _configuration["week"]).ConfigureAwait(false);
-        // TODO - Figure out how to replace the need for the "week" field. In its current state it needs to be updated every week
+            year: year,
+            week: _commandRunnerHelper.CalculateCurrentNflSeasonWeek(year)).ConfigureAwait(false);
         var handler = returnedTuple.Item1;
         var endpoints = returnedTuple.Item2;
         _logger.LogInformation("Api setup complete");
