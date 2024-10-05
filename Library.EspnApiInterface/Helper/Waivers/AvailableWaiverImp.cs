@@ -2,7 +2,7 @@ using Library.EspnApiInterface.DataModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Library.EspnApiInterface.Helper;
+namespace Library.EspnApiInterface.Helper.Waivers;
 
 public class AvailableWaiverImp : IAvailableWaivers
 {
@@ -27,28 +27,12 @@ public class AvailableWaiverImp : IAvailableWaivers
         return filteredPlayers;
     }
     
+    // TODO - Top 5 players for each position
     public async Task<IEnumerable<Player>> TopFiveRunningBacks()
     {
 
         await Task.Delay(5000);
         
         return new List<Player>();
-    }
-
-    public dynamic SetUpFilter()
-    {
-        var filter = new
-        {
-            players = new
-            {
-                limit = 10000,
-                sortPercOwned = new
-                {
-                    sortAsc = false,
-                    sortPriority = 1
-                },
-            }
-        };
-        return filter;
     }
 }

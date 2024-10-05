@@ -28,7 +28,7 @@ public class SetUpApiImp : ISetUpApi
         "set-up-api",
         Description = "configures the api's"
     )]
-    public async Task<(HttpClientHandler, IEnumerable<string>)> RunAsync(
+    public async Task<IEnumerable<string>> RunAsync(
         [Option("leagueId")] string? leagueId = null,
         [Option("year")] string? year = null,
         [Option("playerId")] string? playerId = null,
@@ -46,14 +46,9 @@ public class SetUpApiImp : ISetUpApi
         
         _logger.LogInformation("Setting up api");
         var endpoints = _setUpApiHelper.GetApiEndPoints(placeholders);
-        var cookieJar = _espnApiCall.SetUpEspnApiCookies();
-        HttpClientHandler handler = new HttpClientHandler
-        {
-            CookieContainer = cookieJar
-        };
         _logger.LogInformation("Api setup complete");
 
         await Task.CompletedTask;
-        return (handler, endpoints);
+        return endpoints;
     }
 }

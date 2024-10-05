@@ -7,4 +7,6 @@ namespace Library.EspnApiInterface.Helper;
 public interface IEspnApiCall
 {
     CookieContainer SetUpEspnApiCookies();
+    
+    dynamic SetUpFilter();
 }

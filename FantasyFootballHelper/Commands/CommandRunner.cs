@@ -13,6 +13,7 @@ public class CommandRunner : CommandBase
     private readonly ILogger<CommandRunner> _logger;
     private readonly ISetUpApi _setupApi;
     private readonly IGetWaiverWirePlayers _getWaiverWirePlayers;
+    private readonly IGetFantasyTeams _getFantasyTeams;
     private readonly IFantasyFootballDbInterface _fantasyFootballDbInterface;
     private readonly ICommandRunnerHelper _commandRunnerHelper;
     private readonly IConfiguration _configuration;
@@ -21,6 +22,7 @@ public class CommandRunner : CommandBase
         ILogger<CommandRunner> logger,
         ISetUpApi setUpApi,
         IGetWaiverWirePlayers getWaiverWirePlayers,
+        IGetFantasyTeams getFantasyTeams,
         IConfiguration configuration,
         IFantasyFootballDbInterface fantasyFootballDbInterface,
         ICommandRunnerHelper commandRunnerHelper,
@@ -29,6 +31,7 @@ public class CommandRunner : CommandBase
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _setupApi = setUpApi ?? throw new ArgumentNullException(nameof(setUpApi));
         _getWaiverWirePlayers = getWaiverWirePlayers ?? throw new ArgumentNullException(nameof(getWaiverWirePlayers));
+        _getFantasyTeams = getFantasyTeams ?? throw new ArgumentNullException(nameof(getFantasyTeams));
         _fantasyFootballDbInterface = fantasyFootballDbInterface ?? throw new ArgumentNullException(nameof(fantasyFootballDbInterface));
         _commandRunnerHelper = commandRunnerHelper ?? throw new ArgumentNullException(nameof(commandRunnerHelper));
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
@@ -42,15 +45,14 @@ public class CommandRunner : CommandBase
         _logger.LogInformation("Starting command runner");
         _logger.LogInformation("Setting up API");
         var year = _configuration["year"];
-        var returnedTuple  = await _setupApi.RunAsync(leagueId: _configuration["leagueId"],
+        var endpoints = await _setupApi.RunAsync(leagueId: _configuration["leagueId"],
             year: year,
             week: _commandRunnerHelper.CalculateCurrentNflSeasonWeek(year)).ConfigureAwait(false);
-        var handler = returnedTuple.Item1;
-        var endpoints = returnedTuple.Item2;
+        endpoints = endpoints.Select(endpoint => endpoint.ToString()).ToList();
         _logger.LogInformation("Api setup complete");
         
         _logger.LogInformation("Getting waiver wire players");
-        var players = await _getWaiverWirePlayers.RunAsync(handler, endpoints).ConfigureAwait(false);
+        var players = await _getWaiverWirePlayers.RunAsync(endpoints).ConfigureAwait(false);
         var playersToInsert = players.ToList();
         if (playersToInsert.Any())
         {
@@ -58,6 +60,7 @@ public class CommandRunner : CommandBase
             await _fantasyFootballDbInterface.InsertToMySqlDatabaseAsync(playersToInsert, "PLAYERS");
         }
         
-        await Task.CompletedTask;
+        _logger.LogInformation("Getting fantasy teams information");
+        var teams = await _getFantasyTeams.RunAsync(endpoints).ConfigureAwait(false);
     }
 }

@@ -21,4 +21,21 @@ public class EspnApiCallImp : IEspnApiCall
         cookieJar.Add(new Uri(_configuration.GetSection("ApiEndpoints")["BaseAddress"] ?? string.Empty), new Cookie("SWID", _configuration["swid"]));
         return cookieJar;
     }
+    
+    public dynamic SetUpFilter()
+    {
+        var filter = new
+        {
+            players = new
+            {
+                limit = 10000,
+                sortPercOwned = new
+                {
+                    sortAsc = false,
+                    sortPriority = 1
+                },
+            }
+        };
+        return filter;
+    }
 }

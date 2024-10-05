@@ -11,6 +11,10 @@
     "JobRunner-GetWaiverWirePlayers" : {
       "commandName": "Project",
       "commandLineArgs": "get-waiver-wire-players"
+    },
+    "JobRunner-GetFantasyTeams" : {
+      "commandName": "Project",
+      "commandLineArgs": "get-fantasy-teams"
     }
   }
 }
