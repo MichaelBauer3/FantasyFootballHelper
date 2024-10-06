@@ -15,6 +15,10 @@
     "JobRunner-GetFantasyTeams" : {
       "commandName": "Project",
       "commandLineArgs": "get-fantasy-teams"
+    },
+    "JobRunner-GetRosteredPlayers" : {
+      "commandName": "Project",
+      "commandLineArgs": "get-rostered-players"
     }
   }
 }

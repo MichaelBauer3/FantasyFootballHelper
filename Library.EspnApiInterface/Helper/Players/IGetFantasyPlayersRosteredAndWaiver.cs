@@ -1,11 +1,13 @@
 using Library.EspnApiInterface.DataModel;
 using Newtonsoft.Json.Linq;
 
-namespace Library.EspnApiInterface.Helper.Waivers;
+namespace Library.EspnApiInterface.Helper.Players;
 
-public interface IAvailableWaivers
+public interface IGetFantasyPlayersRosteredAndWaiver
 {
     List<JObject>? GetWaiverPlayers(JObject playersData);
+    
+    List<JObject>? GetRosteredPlayers(JObject playersData);
 
     Task<IEnumerable<Player>> TopFiveRunningBacks();
 }

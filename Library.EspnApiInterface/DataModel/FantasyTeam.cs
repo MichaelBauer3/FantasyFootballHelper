@@ -9,5 +9,5 @@ public class FantasyTeam
     public required decimal? PointsAgainst { get; set; }
     public required int? Wins { get; set; }
     public required int? Losses { get; set; }
-    public Player[]? Roster { get; set; }
+    public List<Player>? Roster { get; set; }
 }
