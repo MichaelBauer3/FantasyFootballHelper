@@ -68,6 +68,17 @@ public class GetFantasyTeamsImp : IGetFantasyTeams
                         Losses = (int?)team["Losses"]
                     });
                 }
+                // TODO - Maybe replace with a better way? 
+                teams.Add(new FantasyTeam()
+                {
+                    TeamName = "Waivers",
+                    TeamOwnerId = "Waivers",
+                    TeamId = 0,
+                    PointsFor = -1,
+                    PointsAgainst = -1,
+                    Wins = -1,
+                    Losses = -1
+                });
             }
         }
         else

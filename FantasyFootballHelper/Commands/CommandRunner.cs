@@ -1,6 +1,7 @@
 using Cocona;
 using FantasyFootballHelper.Commands.CommandHelpers.CommandRunnerHelper;
 using FantasyFootballHelper.Commands.CommandHelpers.Generic;
+using Library.EspnApiInterface.DataModel;
 using Library.FantasyFootballDBInterface;
 using Library.FantasyFootballDBInterface.FantasyFootballDBMySqlInterface;
 using Microsoft.Extensions.Configuration;
@@ -54,6 +55,15 @@ public class CommandRunner : CommandBase
         endpoints = endpoints.Select(endpoint => endpoint.ToString()).ToList();
         _logger.LogInformation("Api setup complete");
         
+        _logger.LogInformation("Getting fantasy teams information");
+        var teams = await _getFantasyTeams.RunAsync(endpoints).ConfigureAwait(false);
+        var teamsToInsert = teams.ToList();
+        if (teamsToInsert.Any())
+        {
+            _logger.LogInformation($"[{teamsToInsert.Count()}] teams are being inserted to the database");
+            await _fantasyFootballDbInterface.InsertToMySqlDatabaseAsync(teamsToInsert, "FANTASY_TEAMS");
+        }
+        
         _logger.LogInformation("Getting waiver wire players and rostered players");
         var wirePlayers = await _getWaiverWirePlayers.RunAsync(endpoints).ConfigureAwait(false);
         var rosteredPlayers = await _getRosteredPlayers.RunAsync(endpoints).ConfigureAwait(false);
@@ -63,14 +73,6 @@ public class CommandRunner : CommandBase
         {
             _logger.LogInformation($"[{playersToInsert.Count}] players are being inserted to the database");
             await _fantasyFootballDbInterface.InsertToMySqlDatabaseAsync(playersToInsert, "PLAYERS");
-        }
-        
-        _logger.LogInformation("Getting fantasy teams information");
-        var teams = await _getFantasyTeams.RunAsync(endpoints).ConfigureAwait(false);
-        foreach (var team in teams)
-        {
-            var playersForTeam = playersToInsert.Where(player => player.OnTeamId == team.TeamId).ToList();
-            team.Roster?.AddRange(playersForTeam);
         }
     }
 }
