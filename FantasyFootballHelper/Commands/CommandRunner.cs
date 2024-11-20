@@ -2,6 +2,7 @@ using Cocona;
 using FantasyFootballHelper.Commands.CommandHelpers.CommandRunnerHelper;
 using FantasyFootballHelper.Commands.CommandHelpers.Generic;
 using Library.EspnApiInterface.DataModel;
+using Library.EspnApiInterface.Helper.Statistics;
 using Library.FantasyFootballDBInterface;
 using Library.FantasyFootballDBInterface.FantasyFootballDBMySqlInterface;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,7 @@ public class CommandRunner : CommandBase
     private readonly IFantasyFootballDbInterface _fantasyFootballDbInterface;
     private readonly ICommandRunnerHelper _commandRunnerHelper;
     private readonly IConfiguration _configuration;
+    private readonly IGetFantasyPlayerStatistics _getFantasyPlayerStatistics;
     
     public CommandRunner(
         ILogger<CommandRunner> logger,
@@ -29,6 +31,7 @@ public class CommandRunner : CommandBase
         IConfiguration configuration,
         IFantasyFootballDbInterface fantasyFootballDbInterface,
         ICommandRunnerHelper commandRunnerHelper,
+        IGetFantasyPlayerStatistics getFantasyPlayerStatistics,
         ICoconaContextWrapper coconaContextWrapper) : base(coconaContextWrapper)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -39,6 +42,7 @@ public class CommandRunner : CommandBase
         _fantasyFootballDbInterface = fantasyFootballDbInterface ?? throw new ArgumentNullException(nameof(fantasyFootballDbInterface));
         _commandRunnerHelper = commandRunnerHelper ?? throw new ArgumentNullException(nameof(commandRunnerHelper));
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _getFantasyPlayerStatistics = getFantasyPlayerStatistics ?? throw new ArgumentNullException(nameof(getFantasyPlayerStatistics));
     }
 
     [Command(
@@ -73,6 +77,15 @@ public class CommandRunner : CommandBase
         {
             _logger.LogInformation($"[{playersToInsert.Count}] players are being inserted to the database");
             await _fantasyFootballDbInterface.InsertToMySqlDatabaseAsync(playersToInsert, "PLAYERS");
+        }
+        
+        _logger.LogInformation("Getting player statistics");
+        var playerStats = _getFantasyPlayerStatistics.RunAsync(playersToInsert, endpoints).Result;
+        if (playerStats.Any())
+        {
+            _logger.LogInformation($"[{playerStats.Count}] players are being inserted to the database");
+            // TODO - Flatten Dict so that it can be inserted into MySQL
+            //await _fantasyFootballDbInterface.InsertToMySqlDatabaseAsync(playerStats, ""); // TODO - Create Table for stats
         }
     }
 }

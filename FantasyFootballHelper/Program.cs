@@ -7,6 +7,7 @@ using FantasyFootballHelper.Commands.CommandHelpers.SetUpApiHelper;
 using Library.EspnApiInterface.Helper;
 using Library.EspnApiInterface.Helper.FantasyTeams;
 using Library.EspnApiInterface.Helper.Players;
+using Library.EspnApiInterface.Helper.Statistics;
 using Library.FantasyFootballDBInterface;
 using Library.FantasyFootballDBInterface.FantasyFootballDBMySqlInterface;
 using Library.FantasyFootballDBInterface.SqlReader;
@@ -62,6 +63,7 @@ namespace FantasyFootballHelper
             app.AddCommands<GetWaiverWirePlayersImp>();
             app.AddCommands<GetRosteredPlayersImp>();
             app.AddCommands<GetFantasyTeamsImp>();
+            app.AddCommands<GetFantasyPlayerStatisticsImp>();
             app.AddCommands<CommandRunner>();
 
             app.Run();
@@ -76,12 +78,14 @@ namespace FantasyFootballHelper
             builder.Services.AddTransient<IFantasyFootballDbMySqlInterface, FantasyFootballDbMySqlImp>();
             builder.Services.AddTransient<IFantasyFootballDbInterface, FantasyFootballDbInterfaceImp>();
             builder.Services.AddTransient<ISqlFileReader, SqlFileReaderImp>();
+            builder.Services.AddTransient<IGetStatistics, GetStatisticsImp>();
             
             // Commands - In the order they are used
             builder.Services.AddTransient<ISetUpApi, SetUpApiImp>();
             builder.Services.AddTransient<IGetWaiverWirePlayers, GetWaiverWirePlayersImp>();
             builder.Services.AddTransient<IGetRosteredPlayers, GetRosteredPlayersImp>();
             builder.Services.AddTransient<IGetFantasyTeams, GetFantasyTeamsImp>();
+            builder.Services.AddTransient<IGetFantasyPlayerStatistics, GetFantasyPlayerStatisticsImp>();
             builder.Services.AddTransient<ICommandRunnerHelper, CommandRunnerHelperImp>();
         }
     }
